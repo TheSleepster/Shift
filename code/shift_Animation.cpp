@@ -32,8 +32,10 @@ void playAnimation(Entity *entity, enum AnimationIndex animation)
 // for loop instead?  
   if(playedAnimation.currentTime >= playedAnimation.frameDelay) 
   {
-    playedAnimation.currentFrame++;
-    playedAnimation.currentTime = 0;
+    for(int8 i = 0; i < playedAnimation.animationLength; i++) 
+    {
+      playedAnimation.currentFrame = i;    
+    }
   }
 
   if(playedAnimation.currentFrame >= playedAnimation.animationLength) 
