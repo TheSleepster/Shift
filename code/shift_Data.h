@@ -29,6 +29,7 @@ struct EntityFlags
   bool isAI;
   bool isEnvironment;
   bool isInMotion;
+  bool isInterrupted;
 };
 
 // GENERIC ENTITY (others derive from this)

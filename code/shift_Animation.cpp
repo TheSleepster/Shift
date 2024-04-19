@@ -19,27 +19,23 @@ void playAnimation(Entity *entity, enum AnimationIndex animation)
   // TODO : play the animation related to this passed enum. Do this by indexing the array for a value that will bring
   // the animations data back to this function.
   Animation playedAnimation = Animations[animation];
-
-  playedAnimation.animationLength = Animations[animation].animationLength;
-  playedAnimation.currentFrame = Animations[animation].currentFrame;
-  playedAnimation.frameDelay = Animations[animation].frameDelay;
-  playedAnimation.currentTime = Animations[animation].currentTime;
-
   entity->srcRect = {(real32)((entity->sprite.width / entity->sheetLength) * playedAnimation.currentFrame), 
                     0, (real32)(entity->sprite.width / entity->sheetLength), (real32)entity->sprite.height};
-  playedAnimation.currentTime++;
 
-// for loop instead?  
-  if(playedAnimation.currentTime >= playedAnimation.frameDelay) 
+  while(!entity->entityFlags.isInterrupted) 
   {
-    for(int8 i = 0; i < playedAnimation.animationLength; i++) 
+    if(playedAnimation.currentTime >= playedAnimation.frameDelay) 
     {
-      playedAnimation.currentFrame = i;    
+      playedAnimation.currentFrame++;
+    } 
+    else 
+    {
+      playedAnimation.currentTime++;
     }
-  }
-
-  if(playedAnimation.currentFrame >= playedAnimation.animationLength) 
-  {
-    playedAnimation.currentFrame = 0;
+    if(playedAnimation.currentFrame >= playedAnimation.animationLength) 
+    {
+      playedAnimation.currentFrame = Animations[animation].currentFrame;
+      break;
+    }
   }
 }

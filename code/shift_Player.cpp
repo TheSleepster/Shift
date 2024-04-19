@@ -20,6 +20,7 @@ internal Entity *initPlayer(Texture2D playerTexture)
   player->entityFlags.isPlayer = true;
   player->entityFlags.isAnimated = true;
   player->entityFlags.isInMotion = false;
+  player->entityFlags.isInterrupted = false;
   player->entityFlags.isAI = {};
   player->entityFlags.isEnvironment = {};
 
