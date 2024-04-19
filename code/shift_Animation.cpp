@@ -29,7 +29,8 @@ void playAnimation(Entity *entity, enum AnimationIndex animation)
                     0, (real32)(entity->sprite.width / entity->sheetLength), (real32)entity->sprite.height};
   playedAnimation.currentTime++;
 
-  if(playedAnimation.currentTime >= playedAnimation.currentTime) 
+// for loop instead?  
+  if(playedAnimation.currentTime >= playedAnimation.frameDelay) 
   {
     playedAnimation.currentFrame++;
     playedAnimation.currentTime = 0;

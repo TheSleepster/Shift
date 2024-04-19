@@ -100,7 +100,7 @@ internal vec2 handlePlayerMovement()
     player->vel.x = 0;
   }
 
-  if(IsKeyUp(KEY_W) && IsKeyUp(KEY_D) && IsKeyUp(KEY_S) && IsKeyUp(KEY_D)) 
+  if(IsKeyUp(KEY_W) && IsKeyUp(KEY_A) && IsKeyUp(KEY_S) && IsKeyUp(KEY_D)) 
   {
     player->entityFlags.isInMotion = false;
   }
