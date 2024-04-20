@@ -55,6 +55,8 @@ internal void updatePlayer()
     player->srcRect.height * player->scale
   };
 
+  DrawTexturePro(player->sprite, player->srcRect, player->dstRect, {0, 0}, player->rotation, WHITE);
+
   if(player->entityFlags.isInMotion) 
   {
     playAnimation(player, pWalking);
@@ -65,9 +67,6 @@ internal void updatePlayer()
     playAnimation(player, pIdle);
     printf("idle\n");
   }
-
-  DrawTexturePro
-  (player->sprite, player->srcRect, player->dstRect, {0, 0}, player->rotation, WHITE);
 }
 
 internal vec2 handlePlayerMovement() 

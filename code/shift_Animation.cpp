@@ -10,32 +10,30 @@ void createAnimations()
 // enum number that's used to describe it. For example, Idle = 0 and is located at Animations[0]. Therefore whenever
 // playAnimation(Idle) is called, it will simple pass the data relating to that animation too the function and play it.
   
-  Animations[pIdle] = {2, 0, 90, 0};
-  Animations[pWalking] = {4, 5, 50, 0};
+  Animations[pIdle] = {2, 0, 100, 0};
+  Animations[pWalking] = {4, 4, 50, 0};
 }
 
 void playAnimation(Entity *entity, enum AnimationIndex animation) 
 {
+  global_variable Animation pAnimation = Animations[animation];
   // TODO : play the animation related to this passed enum. Do this by indexing the array for a value that will bring
   // the animations data back to this function.
-  Animation playedAnimation = Animations[animation];
-  entity->srcRect = {(real32)((entity->sprite.width / entity->sheetLength) * playedAnimation.currentFrame), 
-                    0, (real32)(entity->sprite.width / entity->sheetLength), (real32)entity->sprite.height};
-
-  while(!entity->entityFlags.isInterrupted) 
+  
+  pAnimation.currentTime++;
+  if(pAnimation.currentTime >= pAnimation.frameTime) 
   {
-    if(playedAnimation.currentTime >= playedAnimation.frameDelay) 
+    pAnimation.currentFrame++;
+    pAnimation.currentTime = 0;
+    if(pAnimation.currentFrame >= pAnimation.animationLength) 
     {
-      playedAnimation.currentFrame++;
-    } 
-    else 
-    {
-      playedAnimation.currentTime++;
-    }
-    if(playedAnimation.currentFrame >= playedAnimation.animationLength) 
-    {
-      playedAnimation.currentFrame = Animations[animation].currentFrame;
-      break;
+      pAnimation.currentFrame = Animations[animation].currentFrame;
     }
   }
+  real32 animOffset = (real32)(entity->sprite.width / entity->sheetLength) * pAnimation.currentFrame;
+  entity->srcRect.x = {animOffset};
+
+  DrawTexturePro(entity->sprite, entity->srcRect, entity->dstRect, {0, 0}, entity->rotation, WHITE);
 }
+
+// TODO : Investigate the possibility of an Animation State Machine as an alternative for this awfulness

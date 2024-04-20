@@ -7,8 +7,8 @@ struct Animation
 {
   int8 animationLength;
   int8 currentFrame;
-  int8 frameDelay;
-  int8 currentTime;
+  real32 frameTime;
+  real32 currentTime;
 };
 
 enum AnimationIndex 
