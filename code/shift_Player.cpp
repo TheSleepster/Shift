@@ -1,116 +1,76 @@
-#include "shift_Main.h"
-#include "shift_Data.h"
+#include "Shift_Main.h"
+#include "Shift_Player.h"
+#include "Shift_Entity.h"
 
-global_variable Entity *player = nullptr;
+global_variable Texture2D PlayerSpriteSheet; 
 
-void handlePlayerData(Texture2D playerTexture) 
+internal Entity*
+InitPlayerData() 
 {
-  if(player == nullptr) 
-  {
-    player = initPlayer(playerTexture);
-  } 
-  updatePlayer();
+    Entity *dummy = (Entity*)malloc(sizeof(struct Entity));
+
+    dummy->pos = {200, 300};
+    dummy->vel = {0, 0};
+    dummy->movementSpeed = 200.0f;
+    dummy->accel = 0.5f;
+    dummy->friction = 0.25f;
+    dummy->Sprite = PlayerSpriteSheet;
+    dummy->SheetLength = 9;
+    dummy->rotation = 0;
+    dummy->scale = 2.5f;
+    dummy->isActive = true;
+    dummy->isPlayer = true;
+
+    return(dummy);
 }
 
-internal Entity *initPlayer(Texture2D playerTexture) 
+internal vec2 
+PlayerInputManager() 
 {
-  player = (Entity*)malloc(sizeof(struct Entity));
+    if(IsKeyDown(KEY_W)) 
+    {
+        Player->vel.y = -Player->movementSpeed;
+    }  
+    else if(IsKeyDown(KEY_S)) 
+    {
+        Player->vel.y = Player->movementSpeed;
+    }
+    else 
+    {
+        Player->vel.y = 0;
+    }
 
-  player->entityFlags.isActive = true;
-  player->entityFlags.isPlayer = true;
-  player->entityFlags.isAnimated = true;
-  player->entityFlags.isInMotion = false;
-  player->entityFlags.isInterrupted = false;
-  player->entityFlags.isAI = {};
-  player->entityFlags.isEnvironment = {};
-
-  player->sprite = playerTexture; 
-  player->srcRect = {0, 0, 16, 32};
-  player->sheetLength = 9;
-  player->rotation = 0;
-  player->scale = 3;
-
-  player->pos = {200, 300};
-  player->vel = {0, 0};
-  player->movementSpeed = 2.0f;
-
-  player->maxHealth = 5;
-  player->currentHealth = 5;
-
-  return(player);
+    if(IsKeyDown(KEY_A)) 
+    {
+        Player->vel.x = -Player->movementSpeed;
+    }
+    else if(IsKeyDown(KEY_D)) 
+    {
+        Player->vel.x = Player->movementSpeed;
+    }
+    else 
+    {
+        Player->vel.x = 0;
+    }
+    Vector2Normalize(Player->vel);
+    return(Player->vel);
 }
 
-internal void updatePlayer() 
+void HandlePlayer() 
 {
-  vec2 oldPlayerPos = player->pos;
-  player->pos = handlePlayerMovement();
+    if(Player == nullptr) 
+    {
+        PlayerSpriteSheet = CreateTextureFromFilepath("../data/res/textures/PlayerCharacter.png");
+        Player = InitPlayerData();
+    }
+    vec2 NewVel = PlayerInputManager();
+    Player->pos.x += NewVel.x * GetFrameTime();
+    Player->pos.y += NewVel.y * GetFrameTime();
 
-// TODO : Animation system (State Machine??)
+    Player->SrcRect = 
+    {0, 0, (real32)(Player->Sprite.width/Player->SheetLength), (real32)(Player->Sprite.height)};
+    Player->DstRect = 
+    {Player->pos.x, Player->pos.y, Player->SrcRect.width * Player->scale, Player->SrcRect.height * Player->scale};
 
-  player->dstRect = 
-  {
-    player->pos.x, 
-    player->pos.y, 
-    player->srcRect.width * player->scale,
-    player->srcRect.height * player->scale
-  };
-
-  DrawTexturePro(player->sprite, player->srcRect, player->dstRect, {0, 0}, player->rotation, WHITE);
-
-  if(player->entityFlags.isInMotion) 
-  {
-    playAnimation(player, pWalking);
-    printf("walking\n");
-  }
-  else if(!player->entityFlags.isInMotion) 
-  {
-    playAnimation(player, pIdle);
-    printf("idle\n");
-  }
-}
-
-internal vec2 handlePlayerMovement() 
-{
-
-// VERTICAL
-  if(IsKeyDown(KEY_W)) 
-  {
-    player->vel.y = -player->movementSpeed;
-  } 
-  else if(IsKeyDown(KEY_S)) 
-  {
-    player->vel.y = player->movementSpeed;
-  }
-  else 
-  {
-    player->vel.y = 0;
-  }
-
-// HORIZONTAL
-  if(IsKeyDown(KEY_A)) 
-  {
-    player->vel.x = -player->movementSpeed;
-  }
-  else if(IsKeyDown(KEY_D)) 
-  {
-    player->vel.x = player->movementSpeed;
-  }
-  else 
-  {
-    player->vel.x = 0;
-  }
-
-  if(IsKeyUp(KEY_W) && IsKeyUp(KEY_A) && IsKeyUp(KEY_S) && IsKeyUp(KEY_D)) 
-  {
-    player->entityFlags.isInMotion = false;
-  }
-  else if(IsKeyDown(KEY_W) || IsKeyDown(KEY_A) || IsKeyDown(KEY_S) || IsKeyDown(KEY_D)) 
-  {
-    player->entityFlags.isInMotion = true;
-  }
-
-  Vector2Normalize(player->vel);
-  player->pos.y += player->vel.y;
-  player->pos.x += player->vel.x;
-  return(player->pos);
+    DrawTexturePro(Player->Sprite, Player->SrcRect, Player->DstRect, {0, 0}, Player->rotation, WHITE);
 }
