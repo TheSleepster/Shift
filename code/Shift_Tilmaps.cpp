@@ -3,21 +3,58 @@
 #include "Shift_Player.h"
 #include "Shift_Tilesets.h"
 
-void HandleWorldData() 
-{
-    const int TilemapWidth = 17;
-    const int TilemapHeight = 17;
+global_variable Texture2D FloorTileTexture;
+global_variable Texture2D Dummy;
 
+void InitFloorTexture() 
+{
+    FloorTileTexture = CreateTextureFromFilepath("../data/res/textures/walls.png");
+}
+
+void DrawTileMap(void) 
+{
+    Tiles FloorTile;
+    Tiles Wall1Tile;
+        
     enum TileType 
     {
-        EmptyTile,
-        FloorTile,
-        WallTile,
-        PlayerTile,
+        Empty,
+        Floor1,
+        Wall1,
+        Player,
     };
 
-    vec2 TileSizeInPixels = {10, 10}; 
-    uint32 Tilemap[TilemapWidth][TilemapHeight] = 
+    const int TilemapSizeX = 9;
+    const int TilemapSizeY = 17;
+    
+    int32 Tilemap[TilemapSizeX][TilemapSizeY] = 
     {
-    }; 
+        {1,1,1,1, 1,1,1,1, 1,1,1,1, 1,1,1,1, 1},
+        {1,0,0,0, 0,0,0,0, 0,0,0,0, 0,0,0,0, 1},
+        {1,0,0,0, 0,0,0,0, 0,0,0,0, 0,0,0,0, 1},
+        {1,0,0,0, 1,1,1,0, 0,0,1,0, 0,0,0,0, 1},
+        {1,0,0,0, 1,0,0,0, 0,0,1,0, 0,0,0,0, 1},
+        {1,0,0,0, 1,0,0,0, 0,0,1,0, 0,0,0,0, 1},
+        {1,0,0,0, 1,0,0,0, 0,0,1,0, 0,0,0,0, 1},
+        {1,0,0,0, 1,0,0,0, 0,0,1,0, 0,0,0,0, 1},
+        {1,1,1,1, 1,1,1,1, 1,1,1,1, 1,1,1,1, 1} 
+    };
+    
+    for(int Row = 0; Row < TilemapSizeX; ++Row) 
+    {
+        for(int Column = 0; Column < TilemapSizeY; ++Column) 
+        {
+            switch(Tilemap[Row][Column]) 
+            {
+                case 0: 
+                {
+                    DrawTexturePro(); 
+                }break;
+                case 1:
+                {
+
+                }break;
+            }
+        }
+    }
 }

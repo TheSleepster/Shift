@@ -41,3 +41,9 @@ CreateTextureFromFilepath(const char *Filepath)
 
     return(Texture);
 }
+
+struct vec2i 
+{
+    int x;
+    int y;
+};

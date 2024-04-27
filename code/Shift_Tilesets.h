@@ -5,4 +5,14 @@
 #include "Shift_Player.h"
 #include "Shift_Tilesets.h"
 
-void HandleWorldData();
+void DrawTileMap(void);
+void InitFloorTexture();
+
+struct Tiles 
+{
+    Texture2D FloorTexture;
+    vec2i TileSize;
+    vec2i Tilepos;
+    Rectangle TextureSrc;
+    Rectangle TextureDst;
+};

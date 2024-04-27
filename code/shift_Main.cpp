@@ -6,7 +6,7 @@ internal void
 Init() 
 {
     InitWindow(WINDOW_WIDTH, WINDOW_HEIGHT, "Shift");
-    HandleWorldData();
+    InitFloorTexture();
 }
 
 internal void 
@@ -15,6 +15,7 @@ Update()
     BeginDrawing();
 
     ClearBackground(BLUE);
+    DrawTileMap();
     HandlePlayer();
 
     EndDrawing();
